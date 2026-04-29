@@ -778,8 +778,8 @@ html, body {
   fill: var(--surface2);
   transition: fill 0.2s;
 }
-.mz.primary   { fill: var(--accent); }
-.mz.secondary { fill: #312e81; }
+.mz.primary   { fill: #ef4444; }
+.mz.secondary { fill: #7f1d1d; }
 
 .muscle-diagram-wrap {
   display: flex;

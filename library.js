@@ -996,32 +996,29 @@ function renderLibList() {
             <span class="diff-badge ${ex.difficulty}">${diffLabel[ex.difficulty]}</span>
             <span class="lib-card__cat">${ex.category}</span>
           </div>
-          <div class="muscle-diagram-wrap">
-            ${_svgFront}
-            ${_svgBack}
-          </div>
         </button>`
       ).join("");
 }
 
 function highlightMuscles(primaryList, secondaryList = []) {
-  // Reset all zones in both SVGs
-  document.querySelectorAll(".mz").forEach(el => {
-    el.classList.remove("primary", "secondary");
-  });
+  const wrap = document.querySelector(".muscle-diagram-wrap");
+  if (!wrap) return;
 
-  // Helper to highlight by muscle name
+  wrap.querySelectorAll(".mz").forEach(el => el.classList.remove("primary", "secondary"));
+
   const highlight = (name, cls) => {
     const mapping = MUSCLE_SVG_MAP[name];
     if (!mapping) return;
+    const scope = wrap.querySelector(mapping.view === "front" ? ".svg-front" : ".svg-back");
+    if (!scope) return;
     mapping.ids.forEach(id => {
-      const el = document.getElementById(id);
+      const el = scope.querySelector(`#${id}`);
       if (el) el.classList.add(cls);
     });
   };
 
   secondaryList.forEach(m => highlight(m, "secondary"));
-  primaryList.forEach(m => highlight(m, "primary")); // primary overwrites secondary
+  primaryList.forEach(m => highlight(m, "primary"));
 }
 
 function openLibSheet(id) {
@@ -1039,8 +1036,8 @@ function openLibSheet(id) {
       <span class="muscle-tag secondary">Défaut : ${defaultVal}</span>
     </div>
     <div class="muscle-diagram-wrap">
-      <img src="muscle-front.svg" id="diag-front" style="height:220px">
-      <img src="muscle-back.svg"  id="diag-back"  style="height:220px">
+      <div class="svg-front">${_svgFront}</div>
+      <div class="svg-back">${_svgBack}</div>
     </div>
     <div class="lib-sheet-section">
       <div class="lib-sheet-label">Muscles principaux</div>
