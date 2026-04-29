@@ -793,3 +793,6 @@ html, body {
   height: 220px;
   width: auto;
 }
+
+
+.ex-gif { width: 100%; max-width: 180px; border-radius: var(--radius); display: block; margin: 0.75rem auto; }
