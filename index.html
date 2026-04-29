@@ -174,6 +174,10 @@
       <button class="btn-icon" onclick="closeLibPicker()">✕</button>
     </div>
     <div class="picker-filters">
+      <div class="lib-loc-toggle">
+        <button class="lib-loc-btn active" id="picker-loc-home" onclick="setPickerLoc('home')">🏠 Maison</button>
+        <button class="lib-loc-btn"        id="picker-loc-gym"  onclick="setPickerLoc('gym')">🏋️ Salle</button>
+      </div>
       <div class="lib-cat-pills" id="picker-cat-pills">
         <button class="lib-cat-pill active" data-cat="all"    onclick="setPickerCat('all')">Tous</button>
         <button class="lib-cat-pill"        data-cat="Push"   onclick="setPickerCat('Push')">Push</button>

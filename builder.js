@@ -333,11 +333,14 @@ function initExercisesSortable(bi) {
 
 
 // ── Library picker ─────────────────────────────────────
-const pickerState = { blockIdx: null, category: "all" };
+const pickerState = { blockIdx: null, category: "all", location: "home" };
 
 function openLibPicker(bi) {
   pickerState.blockIdx  = bi;
   pickerState.category  = "all";
+  pickerState.location = "home";
+  document.getElementById("picker-loc-home").classList.add("active");
+  document.getElementById("picker-loc-gym").classList.remove("active");
   document.getElementById("picker-search").value = "";
   document.querySelectorAll("#picker-cat-pills .lib-cat-pill")
     .forEach(p => p.classList.toggle("active", p.dataset.cat === "all"));
@@ -351,6 +354,13 @@ function closeLibPicker() {
   document.getElementById("picker-modal").classList.remove("open");
 }
 
+function setPickerLoc(loc) {
+  pickerState.location = loc;
+  document.getElementById("picker-loc-home").classList.toggle("active", loc === "home");
+  document.getElementById("picker-loc-gym").classList.toggle("active",  loc === "gym");
+  renderPickerList();
+}
+
 function setPickerCat(cat) {
   pickerState.category = cat;
   document.querySelectorAll("#picker-cat-pills .lib-cat-pill")
@@ -361,10 +371,14 @@ function setPickerCat(cat) {
 function renderPickerList() {
   const search    = (document.getElementById("picker-search")?.value || "").toLowerCase();
   const diffLabel = { beginner: "Débutant", intermediate: "Intermédiaire", advanced: "Avancé" };
+  const locMatch = pickerState.location === "home"
+    ? ["home", "bar", "dumbbells"]
+    : ["gym",  "bar", "dumbbells"];
 
   const filtered = EXERCISE_LIBRARY.filter(ex => {
     if (pickerState.category !== "all" && ex.category !== pickerState.category) return false;
     if (search && !ex.name.toLowerCase().includes(search)) return false;
+    if (!locMatch.includes(ex.location)) return false;
     return true;
   });
 
