@@ -139,6 +139,7 @@ const views = {
   session: document.getElementById("view-session"),
   done:    document.getElementById("view-done"),
   builder: document.getElementById("view-builder"),
+  library: document.getElementById("view-library"),
 };
 
 function showView(name) {
