@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Sports Timer" />
+  <title>Sports Timer</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══ HOME VIEW ══════════════════════════════════ -->
+  <div class="view" id="view-home">
+    <div class="home-top">
+      <div class="home-header">
+        <h1>Sports Timer 🏋️</h1>
+        <p>Sélectionne ta séance du jour</p>
+      </div>
+      <div class="tabs">
+        <button class="tab active" id="tab-btn-presets" onclick="showTab('presets')">Presets</button>
+        <button class="tab"        id="tab-btn-custom"  onclick="showTab('custom')">Mes programmes</button>
+      </div>
+    </div>
+
+    <div class="tab-content" style="flex:1; overflow-y:auto; padding: 0 1rem 2rem;">
+      <!-- Presets tab -->
+      <div id="tab-presets">
+        <div class="day-list" id="day-list"></div>
+      </div>
+
+      <!-- Custom programs tab -->
+      <div id="tab-custom" style="display:none">
+        <div class="day-list" id="custom-list"></div>
+        <button class="btn-new-prog" onclick="openBuilder()">+ Nouveau programme</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SESSION VIEW ═══════════════════════════════ -->
+  <div class="view" id="view-session">
+    <div class="session-header">
+      <span class="session-header__title" id="session-day-title"></span>
+      <button class="btn-icon" onclick="exitSession()" title="Quitter">✕</button>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-label">
+        <span id="progress-left"></span>
+        <span id="progress-right"></span>
+      </div>
+    </div>
+    <div class="session-main" id="session-main"></div>
+    <div class="session-controls" id="session-controls"></div>
+  </div>
+
+  <!-- ══ DONE VIEW ══════════════════════════════════ -->
+  <div class="view" id="view-done">
+    <div class="done-emoji">🎉</div>
+    <div class="done-title">Séance terminée !</div>
+    <div class="done-sub" id="done-day-name"></div>
+    <div class="done-stats">
+      <div class="done-stat">
+        <span class="done-stat__label">Durée</span>
+        <span class="done-stat__val" id="done-duration">—</span>
+      </div>
+      <div class="done-stat">
+        <span class="done-stat__label">Exercices</span>
+        <span class="done-stat__val" id="done-exercises">—</span>
+      </div>
+      <div class="done-stat">
+        <span class="done-stat__label">Blocs</span>
+        <span class="done-stat__val" id="done-blocks">—</span>
+      </div>
+    </div>
+    <button class="btn-main primary" style="max-width:18rem; width:100%;" onclick="renderHome()">
+      ← Retour au planning
+    </button>
+  </div>
+
+  <!-- ══ BUILDER VIEW ═══════════════════════════════ -->
+  <div class="view" id="view-builder">
+
+    <!-- Top bar -->
+    <div class="builder-topbar">
+      <button class="btn-icon" onclick="exitBuilder()">←</button>
+      <span class="builder-topbar__title" id="builder-title">Nouveau programme</span>
+      <button class="btn-save-prog" onclick="saveProgram()">Sauver ✓</button>
+    </div>
+
+    <!-- Error banner -->
+    <div id="builder-error" class="builder-error" style="display:none"></div>
+
+    <!-- Scrollable body -->
+    <div class="builder-scroll">
+
+      <!-- Meta -->
+      <div class="builder-section">
+        <div class="builder-section-label">Programme</div>
+        <input id="prog-name" class="prog-name-input" placeholder="Nom (ex: Lundi)"
+          oninput="B.program.day = this.value; document.getElementById('builder-title').textContent = this.value || 'Nouveau programme'">
+        <input id="prog-subtitle" class="prog-subtitle-input" placeholder="Sous-titre (ex: UPPER FORCE)"
+          oninput="B.program.name = this.value">
+      </div>
+
+      <!-- Emoji -->
+      <div class="builder-section">
+        <div class="builder-section-label">Icône</div>
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+
+      <!-- Color -->
+      <div class="builder-section">
+        <div class="builder-section-label">Couleur</div>
+        <div class="color-swatches" id="color-swatches"></div>
+      </div>
+
+      <!-- Blocks -->
+      <div class="builder-section">
+        <div class="builder-section-label">Blocs <span id="blocks-count" class="section-count"></span></div>
+        <div id="blocks-list" class="blocks-list"></div>
+        <div class="add-block-row">
+          <button class="btn-add-block" onclick="addBlock('standard')">+ Standard</button>
+          <button class="btn-add-block hiit" onclick="addBlock('hiit')">+ HIIT 🔥</button>
+        </div>
+      </div>
+
+    </div><!-- /builder-scroll -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="builder.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
