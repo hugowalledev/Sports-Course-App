@@ -771,3 +771,25 @@ html, body {
   padding: 0.25rem 0.75rem;
   cursor: pointer;
 }
+
+
+/* ══ MUSCLE DIAGRAM ═══════════════════════════════════ */
+.mz {
+  fill: var(--surface2);
+  transition: fill 0.2s;
+}
+.mz.primary   { fill: var(--accent); }
+.mz.secondary { fill: #312e81; }
+
+.muscle-diagram-wrap {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  max-height: 260px;
+  margin: 0.75rem 0;
+}
+.muscle-diagram-wrap svg {
+  width: auto;
+  height: 100%;
+  max-height: 260px;
+}

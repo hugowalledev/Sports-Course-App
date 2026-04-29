@@ -1,3 +1,12 @@
+let _svgFront = "", _svgBack = "";
+
+async function loadSVGs() {
+  try {
+    _svgFront = await fetch("muscle-front.svg").then(r => r.text());
+    _svgBack  = await fetch("muscle-back.svg").then(r => r.text());
+  } catch (_) {}
+}
+
 /* ═══════════════════════════════════════════════════════
    Exercise Library
    location: "home" = bodyweight only
@@ -889,6 +898,48 @@ const EXERCISE_LIBRARY = [
   },
 ];
 
+const MUSCLE_SVG_MAP = {
+  // ── Front ──────────────────────────────
+  "Pectoraux":               { view: "front", ids: ["upper-pectoralis", "mid-lower-pectoralis"] },
+  "Pectoraux supérieurs":    { view: "front", ids: ["upper-pectoralis"] },
+  "Pectoraux internes":      { view: "front", ids: ["mid-lower-pectoralis"] },
+  "Pectoraux bas":           { view: "front", ids: ["mid-lower-pectoralis"] },
+  "Biceps":                  { view: "front", ids: ["long-head-bicep", "short-head-bicep"] },
+  "Brachial":                { view: "front", ids: ["short-head-bicep"] },
+  "Épaules":                 { view: "front", ids: ["anterior-deltoid", "lateral-deltoid"] },
+  "Épaules (deltoïdes)":     { view: "front", ids: ["anterior-deltoid", "lateral-deltoid"] },
+  "Deltoïdes antérieurs":    { view: "front", ids: ["anterior-deltoid"] },
+  "Deltoïdes latéraux":      { view: "front", ids: ["lateral-deltoid"] },
+  "Abdominaux":              { view: "front", ids: ["upper-abdominals", "lower-abdominals"] },
+  "Abdominaux (droits)":     { view: "front", ids: ["upper-abdominals", "lower-abdominals"] },
+  "Abdominaux bas":          { view: "front", ids: ["lower-abdominals"] },
+  "Core":                    { view: "front", ids: ["upper-abdominals", "lower-abdominals", "obliques"] },
+  "Core profond":            { view: "front", ids: ["upper-abdominals", "lower-abdominals"] },
+  "Transverse":              { view: "front", ids: ["lower-abdominals"] },
+  "Obliques":                { view: "front", ids: ["obliques"] },
+  "Quadriceps":              { view: "front", ids: ["outer-quadricep", "rectus-femoris", "inner-quadricep"] },
+  "Mollets (gastrocnémien)": { view: "front", ids: ["gastrocnemius"] },
+  "Soléaire":                { view: "front", ids: ["soleus"] },
+  "Mollets":                 { view: "front", ids: ["gastrocnemius", "soleus"] },
+  "Gastrocnémien":           { view: "front", ids: ["gastrocnemius"] },
+  "Fléchisseurs de hanche":  { view: "front", ids: ["groin"] },
+  "Avant-bras":              { view: "front", ids: ["wrist-flexors"] },
+
+  // ── Back ───────────────────────────────
+  "Grand dorsal":            { view: "back", ids: ["lats"] },
+  "Trapèzes":                { view: "back", ids: ["upper-trapezius", "traps-middle", "lower-trapezius"] },
+  "Trapèzes inférieurs":     { view: "back", ids: ["lower-trapezius"] },
+  "Rhomboïdes":              { view: "back", ids: ["traps-middle"] },
+  "Triceps":                 { view: "back", ids: ["medial-head-triceps", "long-head-triceps", "lateral-head-triceps"] },
+  "Triceps (longue portion)":{ view: "back", ids: ["long-head-triceps"] },
+  "Épaules (3 chefs)":       { view: "back", ids: ["posterior-deltoid", "lateral-deltoid"] },
+  "Deltoïdes postérieurs":   { view: "back", ids: ["posterior-deltoid"] },
+  "Fessiers":                { view: "back", ids: ["gluteus-maximus", "gluteus-medius"] },
+  "Ischio-jambiers":         { view: "back", ids: ["medial-hamstrings", "lateral-hamstrings"] },
+  "Lombaires":               { view: "back", ids: ["lowerback"] },
+  "Érecteurs du rachis":     { view: "back", ids: ["lowerback"] },
+};
+
 
 /* ═══════════════════════════════════════════════════════
    Library UI
@@ -945,8 +996,32 @@ function renderLibList() {
             <span class="diff-badge ${ex.difficulty}">${diffLabel[ex.difficulty]}</span>
             <span class="lib-card__cat">${ex.category}</span>
           </div>
+          <div class="muscle-diagram-wrap">
+            ${_svgFront}
+            ${_svgBack}
+          </div>
         </button>`
       ).join("");
+}
+
+function highlightMuscles(primaryList, secondaryList = []) {
+  // Reset all zones in both SVGs
+  document.querySelectorAll(".mz").forEach(el => {
+    el.classList.remove("primary", "secondary");
+  });
+
+  // Helper to highlight by muscle name
+  const highlight = (name, cls) => {
+    const mapping = MUSCLE_SVG_MAP[name];
+    if (!mapping) return;
+    mapping.ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add(cls);
+    });
+  };
+
+  secondaryList.forEach(m => highlight(m, "secondary"));
+  primaryList.forEach(m => highlight(m, "primary")); // primary overwrites secondary
 }
 
 function openLibSheet(id) {
@@ -962,6 +1037,10 @@ function openLibSheet(id) {
       <span class="diff-badge ${ex.difficulty}">${diffLabel[ex.difficulty]}</span>
       <span class="muscle-tag">${locLabel[ex.location]}</span>
       <span class="muscle-tag secondary">Défaut : ${defaultVal}</span>
+    </div>
+    <div class="muscle-diagram-wrap">
+      <img src="muscle-front.svg" id="diag-front" style="height:220px">
+      <img src="muscle-back.svg"  id="diag-back"  style="height:220px">
     </div>
     <div class="lib-sheet-section">
       <div class="lib-sheet-label">Muscles principaux</div>
@@ -981,6 +1060,7 @@ function openLibSheet(id) {
       <div class="lib-sheet-cue">${ex.cue}</div>
     </div>
   `;
+  highlightMuscles(ex.muscles.primary, ex.muscles.secondary);
   document.getElementById("lib-backdrop").classList.add("open");
   document.getElementById("lib-sheet").classList.add("open");
 }
@@ -989,3 +1069,5 @@ function closeLibSheet() {
   document.getElementById("lib-backdrop").classList.remove("open");
   document.getElementById("lib-sheet").classList.remove("open");
 }
+
+loadSVGs();

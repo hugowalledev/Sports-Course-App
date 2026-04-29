@@ -8,6 +8,8 @@ const ASSETS = [
   "/builder.js",
   "/library.js",
   "/manifest.json",
+  "/muscle-front.svg",
+  "/muscle-back.svg",
   "https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js",
 ];
 
