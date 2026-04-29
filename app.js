@@ -324,6 +324,7 @@ function renderExercise(step) {
     setMain(`
       <div class="phase-badge ${badgeClass} fade-up">${badgeLabel}</div>
       <div class="exercise-name fade-up">${step.name}</div>
+      ${step.libraryId ? `<button class="btn-ex-info" onclick="openExerciseInfo('${step.libraryId}')">? Technique</button>` : ""}
       ${step.note ? `<div class="exercise-note fade-up">${step.note}</div>` : ""}
       ${timerCircleHTML(s)}
       <div class="round-badge fade-up accent-color">Tour ${step.round} / ${step.totalRounds}</div>
@@ -497,6 +498,11 @@ function exitSession() {
   clearTimer();
   releaseWakeLock();
   renderHome();
+}
+// ──────────────────────────────────────
+function openExerciseInfo(libraryId) {
+  if (typeof EXERCISE_LIBRARY === "undefined") return;
+  openLibSheet(libraryId);  // reuses the library bottom sheet
 }
 
 // ── Init ──────────────────────────────────────────────

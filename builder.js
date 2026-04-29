@@ -184,6 +184,7 @@ function renderBlockCard(b, i) {
       <div class="block-body" id="block-body-${i}" style="display:${expanded ? "block" : "none"}">
         <div class="exercises-list" id="exercises-list-${i}">${exRows}</div>
         <button class="btn-add-ex" onclick="addExercise(${i})">+ Exercice</button>
+        <button class="btn-add-ex btn-pick-lib" onclick="openLibPicker(${i})">📚 Depuis la bibliothèque</button>
       </div>
     </div>`;
 }
@@ -330,6 +331,82 @@ function initExercisesSortable(bi) {
   });
 }
 
+
+// ── Library picker ─────────────────────────────────────
+const pickerState = { blockIdx: null, category: "all" };
+
+function openLibPicker(bi) {
+  pickerState.blockIdx  = bi;
+  pickerState.category  = "all";
+  document.getElementById("picker-search").value = "";
+  document.querySelectorAll("#picker-cat-pills .lib-cat-pill")
+    .forEach(p => p.classList.toggle("active", p.dataset.cat === "all"));
+  renderPickerList();
+  document.getElementById("picker-backdrop").classList.add("open");
+  document.getElementById("picker-modal").classList.add("open");
+}
+
+function closeLibPicker() {
+  document.getElementById("picker-backdrop").classList.remove("open");
+  document.getElementById("picker-modal").classList.remove("open");
+}
+
+function setPickerCat(cat) {
+  pickerState.category = cat;
+  document.querySelectorAll("#picker-cat-pills .lib-cat-pill")
+    .forEach(p => p.classList.toggle("active", p.dataset.cat === cat));
+  renderPickerList();
+}
+
+function renderPickerList() {
+  const search    = (document.getElementById("picker-search")?.value || "").toLowerCase();
+  const diffLabel = { beginner: "Débutant", intermediate: "Intermédiaire", advanced: "Avancé" };
+
+  const filtered = EXERCISE_LIBRARY.filter(ex => {
+    if (pickerState.category !== "all" && ex.category !== pickerState.category) return false;
+    if (search && !ex.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  document.getElementById("picker-list").innerHTML = filtered.length === 0
+    ? `<p class="empty-msg">Aucun exercice trouvé.</p>`
+    : filtered.map(ex => `
+        <button class="lib-card picker-card" onclick="pickLibExercise('${ex.id}')">
+          <div class="lib-card__info">
+            <div class="lib-card__name">${ex.name}</div>
+            <div class="lib-card__muscles">${ex.muscles.primary.join(", ")}</div>
+          </div>
+          <div class="lib-card__badges">
+            <span class="diff-badge ${ex.difficulty}">${diffLabel[ex.difficulty]}</span>
+            <span class="lib-card__cat">${ex.category}</span>
+          </div>
+        </button>`
+      ).join("");
+}
+
+function pickLibExercise(exId) {
+  const bi = pickerState.blockIdx;
+  const ex = EXERCISE_LIBRARY.find(e => e.id === exId);
+  if (!ex || bi === null) return;
+
+  const block = B.program.blocks[bi];
+  const newEx = block.type === "hiit"
+    ? { name: ex.name }
+    : {
+        name:      ex.name,
+        type:      ex.defaultType,
+        reps:      String(ex.defaultReps  || 10),
+        seconds:   ex.defaultSeconds || 30,
+        note:      ex.muscles.primary.join(", "),
+        libraryId: ex.id,
+      };
+
+  block.exercises.push(newEx);
+  closeLibPicker();
+  renderExercisesList(bi);
+}
+
+
 // ── Helpers ───────────────────────────────────────────
 function esc(str) {
   return String(str ?? "")
@@ -338,3 +415,4 @@ function esc(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+

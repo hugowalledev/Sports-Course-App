@@ -176,5 +176,25 @@
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
   </script>
+  <!-- ══ LIBRARY PICKER MODAL ════════════════════════ -->
+  <div class="picker-backdrop" id="picker-backdrop" onclick="closeLibPicker()"></div>
+  <div class="picker-modal" id="picker-modal">
+    <div class="picker-topbar">
+      <span class="picker-title">Choisir un exercice</span>
+      <button class="btn-icon" onclick="closeLibPicker()">✕</button>
+    </div>
+    <div class="picker-filters">
+      <div class="lib-cat-pills" id="picker-cat-pills">
+        <button class="lib-cat-pill active" data-cat="all"    onclick="setPickerCat('all')">Tous</button>
+        <button class="lib-cat-pill"        data-cat="Push"   onclick="setPickerCat('Push')">Push</button>
+        <button class="lib-cat-pill"        data-cat="Pull"   onclick="setPickerCat('Pull')">Pull</button>
+        <button class="lib-cat-pill"        data-cat="Legs"   onclick="setPickerCat('Legs')">Legs</button>
+        <button class="lib-cat-pill"        data-cat="Core"   onclick="setPickerCat('Core')">Core</button>
+        <button class="lib-cat-pill"        data-cat="Cardio" onclick="setPickerCat('Cardio')">Cardio</button>
+      </div>
+      <input class="lib-search" id="picker-search" placeholder="Rechercher…" oninput="renderPickerList()">
+    </div>
+    <div class="picker-list" id="picker-list"></div>
+  </div>
 </body>
 </html>
