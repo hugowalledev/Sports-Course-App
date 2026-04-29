@@ -138,7 +138,7 @@
   <!-- ══ LIBRARY VIEW ════════════════════════════════ -->
   <div class="view" id="view-library">
     <div class="lib-topbar">
-        <button class="btn-icon" onclick="showView('home')">←</button>
+        <button class="btn-icon" onclick="renderHome()">←</button>
         <span class="lib-topbar__title">Bibliothèque</span>
     </div>
     <div class="lib-filters">
@@ -166,16 +166,6 @@
     <div class="lib-sheet-content" id="lib-sheet-content"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-  <script src="data.js"></script>
-  <script src="library.js"></script>
-  <script src="app.js"></script>
-  <script src="builder.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-  </script>
   <!-- ══ LIBRARY PICKER MODAL ════════════════════════ -->
   <div class="picker-backdrop" id="picker-backdrop" onclick="closeLibPicker()"></div>
   <div class="picker-modal" id="picker-modal">
@@ -196,5 +186,16 @@
     </div>
     <div class="picker-list" id="picker-list"></div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="data.js"></script>
+  <script src="library.js"></script>
+  <script src="app.js"></script>
+  <script src="builder.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>

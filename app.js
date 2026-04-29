@@ -95,6 +95,7 @@ function buildSteps(day) {
               seconds: ex.seconds,
               reps: ex.reps,
               note: ex.note,
+              libraryId: ex.libraryId || null,
               phase: "exercise",
               round: r + 1,
               totalRounds: block.rounds,
@@ -349,6 +350,7 @@ function renderExercise(step) {
     setMain(`
       <div class="phase-badge phase-exercise fade-up">EXERCICE</div>
       <div class="exercise-name fade-up">${step.name}</div>
+      ${step.libraryId ? `<button class="btn-ex-info" onclick="openExerciseInfo('${step.libraryId}')">? Technique</button>` : ""}
       ${step.note ? `<div class="exercise-note fade-up">${step.note}</div>` : ""}
       <div class="reps-display accent-color fade-up pulse">${step.reps}</div>
       <div class="reps-label fade-up">répétitions</div>

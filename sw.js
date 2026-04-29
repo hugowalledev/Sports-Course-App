@@ -6,6 +6,7 @@ const ASSETS = [
   "/app.js",
   "/data.js",
   "/builder.js",
+  "/library.js",
   "/manifest.json",
   "https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js",
 ];
