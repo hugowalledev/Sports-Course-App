@@ -261,12 +261,12 @@ const WORKOUT_PLAN = [
         name: "Bloc A — Contrôle strict",
         info: "5 tours — 45s effort / 15s transition",
         rounds: 5,
-        rest_seconds: 15,
+        rest_seconds: 60,
         exercises: [
-          { name: "Pompes strictes",    type: "duration", seconds: 45, note: "Tempo parfait" },
-          { name: "Dead hang",          type: "duration", seconds: 45 },
-          { name: "Y raises au sol",    type: "duration", seconds: 45 },
-          { name: "Planche bras tendus",type: "duration", seconds: 45 },
+          { name: "Pompes strictes",    type: "duration", seconds: 45, note: "Tempo parfait", rest: 15 },
+          { name: "Dead hang",          type: "duration", seconds: 45, rest: 15 },
+          { name: "Y raises au sol",    type: "duration", seconds: 45, rest: 15 },
+          { name: "Planche bras tendus",type: "duration", seconds: 45, rest: 15 },
         ],
       },
       {

@@ -102,6 +102,16 @@ function buildSteps(day) {
               repeatIdx: rep,
               repeatTotal: repeatCount,
             });
+            if (ex.rest > 0) {
+              steps.push({
+                kind: "rest",
+                block,
+                seconds: ex.rest,
+                label: "REPOS",
+                round: r + 1,
+                totalRounds: block.rounds,
+              });
+            }
           }
         }
         // Rest after each round except the last

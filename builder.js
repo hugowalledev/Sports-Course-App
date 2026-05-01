@@ -211,6 +211,9 @@ function renderExRow(bi, ei, e) {
       ${valInput}
       <input class="ex-note-input" value="${esc(e.note || "")}" placeholder="Note (optionnel)"
         onchange="B.program.blocks[${bi}].exercises[${ei}].note = this.value">
+      <input class="ex-rest-input" type="number" min="0" placeholder="Repos (s)"
+        value="${e.rest || ""}"
+        onchange="B.program.blocks[${bi}].exercises[${ei}].rest = +this.value || 0">
       <button class="btn-del-ex" onclick="deleteExercise(${bi}, ${ei})">✕</button>
     </div>`;
 }
